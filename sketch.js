@@ -1,11 +1,14 @@
 let height = 400;
-let weith = height * 2;
+let width = height * 2;
 let ball_image;
 let player1;
 let computer1;
 let background_image;
 let soundBounce;
 let soundScore;
+let player1_scorer = document.getElementById("player1-score");
+let player2_scorer = document.getElementById("player2-score");
+let howMakeScore;
 
 class Ball {
     constructor() {
@@ -47,14 +50,30 @@ class Ball {
             this.angle += Math.PI;
         }
         
-
+        
         //if touch the edges of the canvas, reverse the speed
-        if (this.x < this.diameter - this.radius || this.x > weith - this.radius) {
+        if (this.x < this.diameter - this.radius || this.x > width - this.radius) {
+
+            //if the ball is on the left side of the canvas, player 2 made a score
+            console.log(width, this.x, this.radius);
+            if (this.x < width / 2) {          
+                //player 2 make a score
+                howMakeScore = 2;                               
+                player2_scorer.textContent = parseInt(player2_scorer.textContent) + 1;
+
+            }else {
+                //player 1 make a score 
+                howMakeScore = 1;
+                player1_scorer.textContent = parseInt(player1_scorer.textContent) + 1;
+            }
             
             this.speedX *= -1;
             this.reset();
+            
             //play the score sound
             soundScore.play();
+            speakPontuation();
+
         }
         if (this.y < this.diameter - this.radius || this.y > height - this.radius) {
             this.speedY *= -1;
@@ -63,6 +82,23 @@ class Ball {
         this.x += this.speedX;
         this.y += this.speedY;
     }
+}
+
+function speakPontuation() {
+    //user speaker from the browser to say the score
+    let message;
+
+    if (howMakeScore == 1) {
+        message = `Player 1 scored! ${player1_scorer.textContent}`;    
+    }else{
+        message = `Computer scored! ${player2_scorer.textContent}`;
+    }
+
+    let utterance = new SpeechSynthesisUtterance(message);
+    utterance.lang = 'en-US'; // Set the language to English
+    utterance.rate = 1; // Set the rate of speech
+    utterance.pitch = 1; // Set the pitch of the voice
+    speechSynthesis.speak(utterance);
 }
 
 class player {
@@ -126,18 +162,17 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(weith, height);
+    createCanvas(width, height);
     background(255);
 }
 
 let ball = new Ball();
 let racket = new player(15);
-let computer = new player(weith - 25);
+let computer = new player(width - 25);
 
 function draw() {
-    //background(255);
     //draw the background image with the size of the canvas
-    image(background_image, 0, 0, weith, height);
+    image(background_image, 0, 0, width, height);
 
     ball.draw();
     ball.update();

@@ -9,3 +9,16 @@ body {
 canvas {
     border: 1px solid black;
 }
+
+.game-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+}
+.score {
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 10px;
+}
