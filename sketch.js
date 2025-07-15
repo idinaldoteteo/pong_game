@@ -1,9 +1,11 @@
 let height = 400;
 let weith = height * 2;
-let ball_image = "../images/ball.png";
-let player1 = "../images/player1.png";
-let computer1 = "../images/player2.png";
-let background_image = "../images/background2.png";
+let ball_image;
+let player1;
+let computer1;
+let background_image;
+let soundBounce;
+let soundScore;
 
 class Ball {
     constructor() {
@@ -13,26 +15,46 @@ class Ball {
         this.radius = this.diameter / 2;
         this.speedX = 3;
         this.speedY = 2;
+        this.angle = 0;
     }
+    
     reset() {
         this.y = height / 2;
         this.x = width / 2;
         this.speedX = Math.random() * 5;
         this.speedY = Math.random() * 5;
+        this.angle = 0;
               
         this.draw();
     }
+    
     draw() {
-        //draw the image of the ball
-        image(ball_image, this.x - this.radius, this.y - this.radius, this.diameter, this.diameter);
+        //rotate the ball according to the angle
+        push();
+        translate(this.x, this.y);
+        rotate(this.angle);
+        //draw the image of the ball with the size of the diameter
+        image(ball_image, -this.radius, -this.radius, this.diameter, this.diameter);
+        pop();
         
     }
+    
     update() {
+        //rotates the ball accordinly to the speed
+        this.angle += 0.1;  
+        //if the speed is negative, reverse the angle
+        if (this.speedX < 0) {
+            this.angle += Math.PI;
+        }
+        
+
         //if touch the edges of the canvas, reverse the speed
         if (this.x < this.diameter - this.radius || this.x > weith - this.radius) {
             
             this.speedX *= -1;
             this.reset();
+            //play the score sound
+            soundScore.play();
         }
         if (this.y < this.diameter - this.radius || this.y > height - this.radius) {
             this.speedY *= -1;
@@ -50,16 +72,18 @@ class player {
         this.x = x;
         this.y = height / 2 - this.higth / 2; // center the racket vertically
     }
+    
     draw() {
+
         //draw the image of the racket
         if (this.x == 15) { 
             image(player1, this.x, this.y, this.weight, this.higth);
         } else {
             image(computer1, this.x, this.y, this.weight, this.higth);      
         }
-        // fill(0);
-        // rect(this.x, this.y, this.weight, this.higth);
+        
     }
+
     update() {
         //if the racket is the player's, follow the mouse
         if (this.x == 15) { 
@@ -82,6 +106,8 @@ class player {
             this.y + this.higth >= ball.y - ball.radius &&
             this.y <= ball.y + ball.radius
         ) {
+            //play the bounce sound
+            soundBounce.play();
             ball.speedX *= -1;
             ball.speedX *= 1.05;
             ball.speedY *= 1.05;
@@ -90,10 +116,13 @@ class player {
 }
 
 function preload() {
-    ball_image = loadImage(ball_image);
-    player1 = loadImage(player1);
-    computer1 = loadImage(computer1);
-    background_image = loadImage(background_image);
+
+    ball_image = loadImage("../images/ball.png");
+    player1 = loadImage("../images/player1.png");
+    computer1 = loadImage("../images/player2.png");
+    background_image = loadImage("../images/background2.png");
+    soundBounce = loadSound("../sounds/hit.wav");
+    soundScore = loadSound("../sounds/scorer.wav");
 }
 
 function setup() {
