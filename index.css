@@ -1,3 +1,11 @@
+main > h1{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 36px;
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -14,11 +22,21 @@ canvas {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    max-width: 600px;
-    margin-bottom: 20px;
+    margin-bottom: 20px; 
 }
+
+.players {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+    padding: 8px;
+    background-color: gold;
+}
+
 .score {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 24px;
     font-weight: bold;
-    margin-left: 10px;
+    color: #333;
 }

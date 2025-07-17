@@ -55,7 +55,6 @@ class Ball {
         if (this.x < this.diameter - this.radius || this.x > width - this.radius) {
 
             //if the ball is on the left side of the canvas, player 2 made a score
-            console.log(width, this.x, this.radius);
             if (this.x < width / 2) {          
                 //player 2 make a score
                 howMakeScore = 2;                               
